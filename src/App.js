@@ -15,7 +15,7 @@ const PokemonRow = ({ pokemon, onSelect }) => (
         color="primary"
         onClick={() => onSelect(pokemon)}
       >
-        Select!
+        More Information
       </Button>
     </td>
   </tr>
@@ -87,6 +87,11 @@ const Table = styled.table`
   padding: 0.2rem;
 `;
 
+const Header = styled.th`
+  text-align: left;
+  font-size: x-large;
+`;
+
 function App() {
   const [filter, filterSet] = React.useState("");
   const [pokemon, pokemonSet] = React.useState([]);
@@ -113,8 +118,8 @@ function App() {
         <Table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Type</th>
+              <Header>Name</Header>
+              <Header>Type</Header>
             </tr>
           </thead>
           <tbody>
