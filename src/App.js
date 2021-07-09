@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Button } from "@material-ui/core";
+// import styled from "@emotion/styled";
 
 import "./App.css";
 
@@ -8,7 +10,13 @@ const PokemonRow = ({ pokemon, onSelect }) => (
     <td>{pokemon.name.english}</td>
     <td>{pokemon.type.join(", ")}</td>
     <td>
-      <button onClick={() => onSelect(pokemon)}>Select!</button>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => onSelect(pokemon)}
+      >
+        Select!
+      </Button>
     </td>
   </tr>
 );
@@ -51,13 +59,33 @@ PokemonInfo.propTypes = {
   }),
 };
 
+// const Title = styled.h1`
+//   text-align: center;
+// `;
+
+// const TwoColumnLayout = styled.div`
+//   display: "grid",
+// `
+
+// const Container = styled.div`
+//   margin: "auto",
+//   width: 800,
+//   paddingTop: 1rem,
+// `
+
+// const input = styled.input`
+//   width: 100%;
+//   font-size: x-large;
+//   padding: 0.2rem;
+// `
+
 function App() {
   const [filter, filterSet] = React.useState("");
   const [pokemon, pokemonSet] = React.useState([]);
   const [selectedItem, selectedItemSet] = React.useState(null);
 
   React.useEffect(() => {
-    fetch("http://localhost:3000/my-app/pokemon.json")
+    fetch("http://localhost:3000/pokemon.json")
       .then((resp) => resp.json())
       .then((data) => pokemonSet(data));
   }, []);
