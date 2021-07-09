@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button } from "@material-ui/core";
-// import styled from "@emotion/styled";
+import { Button, CssBaseline } from "@material-ui/core";
+import styled from "@emotion/styled";
 
 import "./App.css";
 
@@ -59,25 +59,33 @@ PokemonInfo.propTypes = {
   }),
 };
 
-// const Title = styled.h1`
-//   text-align: center;
-// `;
+const Title = styled.h1`
+  text-align: left;
+`;
 
-// const TwoColumnLayout = styled.div`
-//   display: "grid",
-// `
+const TwoColumnLayout = styled.div`
+  display: grid;
+  grid-template-columns: 70% 30%;
+  grid-column-gap: 1rem;
+`;
 
-// const Container = styled.div`
-//   margin: "auto",
-//   width: 800,
-//   paddingTop: 1rem,
-// `
+const PageContainer = styled.div`
+  margin: 1rem;
+  width: 800;
+  paddingtop: 1rem;
+`;
 
-// const input = styled.input`
-//   width: 100%;
-//   font-size: x-large;
-//   padding: 0.2rem;
-// `
+const Input = styled.input`
+  width: 50%;
+  font-size: x-large;
+  padding: 0.2rem;
+`;
+
+const Table = styled.table`
+  width: 80%;
+  font-size: x-large;
+  padding: 0.2rem;
+`;
 
 function App() {
   const [filter, filterSet] = React.useState("");
@@ -90,24 +98,19 @@ function App() {
       .then((data) => pokemonSet(data));
   }, []);
 
+  if (!pokemon) {
+    return <div>Loading data</div>;
+  }
+
   return (
-    <div
-      style={{
-        margin: "auto",
-        width: 800,
-        paddingTop: "1rem",
-      }}
-    >
-      <h1 className="title">Pokemon Search</h1>
+    <PageContainer>
+      <CssBaseline />
+      <Title>Pokemon Search</Title>
       <div>
-        <input value={filter} onChange={(evn) => filterSet(evn.target.value)} />
+        <Input value={filter} onChange={(evn) => filterSet(evn.target.value)} />
       </div>
-      <div
-        style={{
-          display: "grid",
-        }}
-      >
-        <table width="100%">
+      <TwoColumnLayout>
+        <Table>
           <thead>
             <tr>
               <th>Name</th>
@@ -121,7 +124,7 @@ function App() {
                   .toLowerCase()
                   .includes(filter.toLowerCase())
               )
-              .slice(0, 20)
+              .slice(0, 10)
               .map((pokemon) => (
                 <PokemonRow
                   pokemon={pokemon}
@@ -132,10 +135,10 @@ function App() {
                 key={[pokemon.id, pokemon.name.english].join(':')} */
               ))}
           </tbody>
-        </table>
-      </div>
+        </Table>
+      </TwoColumnLayout>
       {selectedItem && <PokemonInfo {...selectedItem} />}
-    </div>
+    </PageContainer>
   );
 }
 
