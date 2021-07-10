@@ -1,37 +1,69 @@
 import React from "react";
-import { CssBaseline } from "@material-ui/core";
 import styled from "@emotion/styled";
+import { CssBaseline } from "@material-ui/core";
+import { createStore } from "redux";
+import { Provider, useSelector, useDispatch } from "react-redux";
 
 import PokemonInfo from "./components/PokemonInfo";
-import PokemonContext from "./PokemonContext";
 import PokemonFilter from "./components/PokemonFilter";
 import PokemonTable from "./components/PokemonTable";
+
+import "./App.css";
 
 const Title = styled.h1`
   text-align: left;
 `;
-
+const PageContainer = styled.div`
+  margin: auto;
+  width: 800px;
+  padding-top: 1em;
+`;
 const TwoColumnLayout = styled.div`
   display: grid;
-  grid-template-columns: 70% 30%;
+  grid-template-columns: 80% 20%;
   grid-column-gap: 1rem;
 `;
 
-const PageContainer = styled.div`
-  margin: 1rem;
-  width: 800;
-  paddingtop: 1rem;
-`;
+const stateReducer = (
+  state = { pokemon: [], filter: "", selectedPokemon: null },
+  { type, payload }
+) => {
+  switch (type) {
+    case "SET_FILTER":
+      return {
+        ...state,
+        filter: payload,
+      };
+    case "SET_POKEMON":
+      return {
+        ...state,
+        pokemon: payload,
+      };
+    case "SET_SELECTED_POKEMON":
+      return {
+        ...state,
+        selectedPokemon: payload,
+      };
+    default:
+      return state;
+  }
+};
+
+const store = createStore(stateReducer);
 
 function App() {
-  const [filter, filterSet] = React.useState("");
-  const [pokemon, pokemonSet] = React.useState([]);
-  const [selectedPokemon, selectedPokemonSet] = React.useState(null);
+  const pokemon = useSelector(({ pokemon }) => pokemon);
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
-    fetch("http://localhost:3000/pokemon.json")
+    fetch("/pokemon.json")
       .then((resp) => resp.json())
-      .then((data) => pokemonSet(data));
+      .then((payload) =>
+        dispatch({
+          type: "SET_POKEMON",
+          payload,
+        })
+      );
   }, []);
 
   if (!pokemon) {
@@ -39,29 +71,22 @@ function App() {
   }
 
   return (
-    <PokemonContext.Provider
-      value={{
-        filter,
-        pokemon,
-        filterSet,
-        pokemonSet,
-        selectedPokemon,
-        selectedPokemonSet,
-      }}
-    >
-      <PageContainer>
-        <CssBaseline />
-        <Title>Pokemon Search</Title>
-        <TwoColumnLayout>
-          <div>
-            <PokemonFilter />
-            <PokemonTable />
-          </div>
-          <PokemonInfo />
-        </TwoColumnLayout>
-      </PageContainer>
-    </PokemonContext.Provider>
+    <PageContainer>
+      <CssBaseline />
+      <Title>Pokemon Search</Title>
+      <TwoColumnLayout>
+        <div>
+          <PokemonFilter />
+          <PokemonTable />
+        </div>
+        <PokemonInfo />
+      </TwoColumnLayout>
+    </PageContainer>
   );
 }
 
-export default App;
+export default () => (
+  <Provider store={store}>
+    <App />
+  </Provider>
+);

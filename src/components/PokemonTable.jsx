@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "@emotion/styled";
 import PokemonRow from "./PokemonRow";
-import PokemonContext from "../PokemonContext";
+import { useSelector, useDispatch } from "react-redux";
 
 const Table = styled.table`
   width: 80%;
@@ -10,7 +10,12 @@ const Table = styled.table`
 `;
 
 function PokemonTable() {
-  const { pokemon, filter, selectedPokemonSet } = useContext(PokemonContext);
+  const { filter, pokemon } = useSelector(({ filter, pokemon }) => ({
+    filter,
+    pokemon,
+  }));
+  const dispatch = useDispatch();
+
   return (
     <Table>
       <tbody>
@@ -23,7 +28,10 @@ function PokemonTable() {
             <PokemonRow
               pokemon={pokemon}
               // key={pokemon.id}
-              onClick={(pokemon) => selectedPokemonSet(pokemon)}
+              onClick={(pokemon) =>  dispatch({
+                type: "SET_SELECTED_POKEMON",
+                payload: pokemon,
+              })}
             />
              /* Create Unique ID
                 key={[pokemon.id, pokemon.name.english].join(':')} */

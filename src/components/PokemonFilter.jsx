@@ -1,22 +1,22 @@
 import React, { useContext } from "react";
 import styled from "@emotion/styled";
-
-import PokemonContext from "../PokemonContext";
+import { useSelector, useDispatch } from "react-redux";
 
 const Input = styled.input`
-  width: 50%;
+  width: 77%;
   font-size: x-large;
   padding: 0.2rem;
 `;
 
 const PokemonFilter = () => {
-  const { filter, filterSet} = useContext(PokemonContext);
+  const filter = useSelector(({filter}) => filter);
+  const dispatch = useDispatch();
 
   return (
     <Input
       type="text"
       value={filter}
-      onChange={(evt) => filterSet(evt.target.value)}
+      onChange={(evt) => dispatch({type: "SET_FILTER", payload: evt.target.value})}
     />
   );
 };
