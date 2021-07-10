@@ -10,7 +10,7 @@ const Table = styled.table`
 `;
 
 function PokemonTable() {
-  const { pokemon, filter, selectedPokemonSet } = useContext(PokemonContext);
+  const { state: {filter, pokemon}, dispatch } = useContext(PokemonContext);
   return (
     <Table>
       <tbody>
@@ -23,7 +23,7 @@ function PokemonTable() {
             <PokemonRow
               pokemon={pokemon}
               // key={pokemon.id}
-              onClick={(pokemon) => selectedPokemonSet(pokemon)}
+              onClick={(pokemon) => dispatch({type: "SET_SELECTED_POKEMON", payload: pokemon})}
             />
              /* Create Unique ID
                 key={[pokemon.id, pokemon.name.english].join(':')} */

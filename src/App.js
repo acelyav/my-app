@@ -23,30 +23,50 @@ const PageContainer = styled.div`
   paddingtop: 1rem;
 `;
 
+const stateReducer = (state, { type, payload }) => {
+  switch (type) {
+    case "SET_FILTER":
+      return {
+        ...state,
+        filter: payload,
+      };
+    case "SET_POKEMON":
+      return {
+        ...state,
+        pokemon: payload,
+      };
+    case "SET_SELECTED_POKEMON":
+      return {
+        ...state,
+        selectedPokemon: payload,
+      };
+    default:
+      throw new Error();
+  }
+};
+
 function App() {
-  const [filter, filterSet] = React.useState("");
-  const [pokemon, pokemonSet] = React.useState([]);
-  const [selectedPokemon, selectedPokemonSet] = React.useState(null);
+  const [state, dispatch] = React.useReducer(stateReducer, {
+    filter: "",
+    pokemon: [],
+    selectedPokemon: null,
+  });
 
   React.useEffect(() => {
     fetch("http://localhost:3000/pokemon.json")
       .then((resp) => resp.json())
-      .then((data) => pokemonSet(data));
+      .then((payload) => dispatch({ type: "SET_POKEMON", payload }));
   }, []);
 
-  if (!pokemon) {
+  if (!state.pokemon) {
     return <div>Loading data</div>;
   }
 
   return (
     <PokemonContext.Provider
       value={{
-        filter,
-        pokemon,
-        filterSet,
-        pokemonSet,
-        selectedPokemon,
-        selectedPokemonSet,
+        state,
+        dispatch,
       }}
     >
       <PageContainer>
