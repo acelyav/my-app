@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "@emotion/styled";
 import PokemonRow from "./PokemonRow";
-import PokemonContext from "../PokemonContext";
+import useStore from "../Store";
 
 const Table = styled.table`
   width: 80%;
@@ -10,7 +10,10 @@ const Table = styled.table`
 `;
 
 function PokemonTable() {
-  const { pokemon, filter, selectedPokemonSet } = useContext(PokemonContext);
+  const filter = useStore((state) => state.filter);
+  const pokemon = useStore((state) => state.pokemon);
+  const setSelectedPokemon = useStore((state) => state.setSelectedPokemon);
+
   return (
     <Table>
       <tbody>
@@ -23,7 +26,7 @@ function PokemonTable() {
             <PokemonRow
               pokemon={pokemon}
               // key={pokemon.id}
-              onClick={(pokemon) => selectedPokemonSet(pokemon)}
+              onClick={(pokemon) => setSelectedPokemon(pokemon)}
             />
              /* Create Unique ID
                 key={[pokemon.id, pokemon.name.english].join(':')} */

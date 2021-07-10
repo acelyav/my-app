@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 
-import PokemonContext from "../PokemonContext";
+import useStore from "../Store";
 
 const PokemonInfo = () => {
-  const { selectedPokemon } = useContext(PokemonContext);
+  const selectedPokemon = useStore((state) => state.selectedPokemon);
 
   return selectedPokemon ? (
     <div>
